@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovio Example", "Rovio Example\Rovio Example.csproj", "{EBDFAF3B-AD0D-4273-A220-CA061DD67D38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roomba Example", "Roomba Example\Roomba Example.csproj", "{7D4818BC-0E06-4110-944D-671C4C99A551}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXT Example", "NXT Example\NXT Example.csproj", "{216E99D5-458E-452D-B7F0-461979807E17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBDFAF3B-AD0D-4273-A220-CA061DD67D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBDFAF3B-AD0D-4273-A220-CA061DD67D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBDFAF3B-AD0D-4273-A220-CA061DD67D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBDFAF3B-AD0D-4273-A220-CA061DD67D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4818BC-0E06-4110-944D-671C4C99A551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4818BC-0E06-4110-944D-671C4C99A551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4818BC-0E06-4110-944D-671C4C99A551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4818BC-0E06-4110-944D-671C4C99A551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216E99D5-458E-452D-B7F0-461979807E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216E99D5-458E-452D-B7F0-461979807E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216E99D5-458E-452D-B7F0-461979807E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216E99D5-458E-452D-B7F0-461979807E17}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

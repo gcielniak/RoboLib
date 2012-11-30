@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovio Console App", "Rovio Console App\Rovio Console App.csproj", "{B692EC38-5DE9-42CA-B867-7B21DA86B885}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rovio Form App", "Rovio Form App\Rovio Form App.csproj", "{B8966B31-BBAE-4C52-8C87-BE85912B1E3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B692EC38-5DE9-42CA-B867-7B21DA86B885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B692EC38-5DE9-42CA-B867-7B21DA86B885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B692EC38-5DE9-42CA-B867-7B21DA86B885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B692EC38-5DE9-42CA-B867-7B21DA86B885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8966B31-BBAE-4C52-8C87-BE85912B1E3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8966B31-BBAE-4C52-8C87-BE85912B1E3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8966B31-BBAE-4C52-8C87-BE85912B1E3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8966B31-BBAE-4C52-8C87-BE85912B1E3F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
