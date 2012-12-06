@@ -1,8 +1,8 @@
-Ôªø/// <summary>
+/// <summary>
 /// The %Rovio wrapper library. Includes the Robot class, API namespace with all commands as specified by the %API specification 
 /// and a set of helper classes for easy access to robot's resources.
 /// 
-/// The majority of comments are based directly on the official %API Specification for Rovio document:
+/// The majority of comments are based directly on the official %API Specification for %Rovio document:
 /// http://www.wowwee.com/static/support/rovio/manuals/Rovio_API_Specifications_v1.2.pdf.
 /// </summary>
 namespace Rovio
@@ -1202,7 +1202,7 @@ namespace Rovio
             /// <summary>
             /// Set server time zone and time.
             /// Sec1970 - seconds since "00:00:00 1/1/1970".
-            /// TimeZone ‚Äì Time zone in minutes. (e.g. Beijing is GMT+08:00, TimeZone = -480)
+            /// TimeZone ñ Time zone in minutes. (e.g. Beijing is GMT+08:00, TimeZone = -480)
             /// 
             /// \todo Implement with DateTime input parameter.
             /// </summary>
@@ -1228,10 +1228,10 @@ namespace Rovio
             /// date - date
             /// ver - version
             /// pos:
-            /// 0 ‚Äì top left
-            /// 1 ‚Äì top right
-            /// 2 ‚Äì bottom left
-            /// 3 ‚Äì bottom right
+            /// 0 ñ top left
+            /// 1 ñ top right
+            /// 2 ñ bottom left
+            /// 3 ñ bottom right
             /// 
             /// \todo Implement the enum input parameters.
             /// </summary>
@@ -1308,14 +1308,14 @@ namespace Rovio
 
             /// <summary>
             /// Set dyndns.org service
-            /// Service ‚Äì DDNS service provider
-            /// User ‚Äì username
-            /// Pass ‚Äì password
-            /// IP ‚Äì IP address (null for auto detect)
-            /// Proxy ‚Äì name of the proxy
-            /// ProxyPort ‚Äì port of the proxy
-            /// ProxyUser ‚Äì username of the proxy
-            /// ProxyPass ‚Äì password of the proxy
+            /// Service ñ DDNS service provider
+            /// User ñ username
+            /// Pass ñ password
+            /// IP ñ IP address (null for auto detect)
+            /// Proxy ñ name of the proxy
+            /// ProxyPort ñ port of the proxy
+            /// ProxyUser ñ username of the proxy
+            /// ProxyPass ñ password of the proxy
             /// 
             /// Set the account for dyndns.org. To connect the dyndns server, 
             /// if HTTP proxy is required, set the Proxy relative value, 
@@ -1337,7 +1337,7 @@ namespace Rovio
             /// Get DDNS settings.
             /// 
             /// Each line represents an item, and every item is in the format as Name = Value. (
-            /// Refer to SetDDNS.cgi) Return information represent by ‚ÄúInfo‚Äù should be one of the following values: 
+            /// Refer to SetDDNS.cgi) Return information represent by ìInfoî should be one of the following values: 
             /// Updated Updating Failed Updating IP Checked Not Update
             /// </summary>
             public string GetDDNS()
@@ -1414,10 +1414,10 @@ namespace Rovio
             /// <summary>
             /// Configure email for sending IPCam images.
             /// 
-            /// Enable ‚Äì Ignored
+            /// Enable ñ Ignored
             /// MailServer - mail server address
-            /// Sender - sender‚Äôs email address
-            /// Receiver - receiver‚Äôs email address, multi-receivers separated by ‚Äò;‚Äô
+            /// Sender - senderís email address
+            /// Receiver - receiverís email address, multi-receivers separated by ë;í
             /// Subject - subject of email
             /// User - user name for logging into the MailServer
             /// PassWord - password for logging into the MailServer
@@ -1486,7 +1486,7 @@ namespace Rovio
             }
 
             /// <summary>
-            /// Get Rovio‚Äôs system logs information.
+            /// Get Rovioís system logs information.
             /// </summary>
             public string GetLog()
             {
@@ -1494,7 +1494,7 @@ namespace Rovio
             }
 
             /// <summary>
-            /// Get Rovio‚Äôs base firmware version.
+            /// Get Rovioís base firmware version.
             /// Rovio also has a UI version and a NS2 version this function only get the base OS version.
             /// </summary>
             public string GetVer()
@@ -1546,8 +1546,8 @@ namespace Rovio
             /// <summary>
             /// Set the media format.
             /// 
-            /// Audio = 0 ‚Äì 4
-            /// Video = 0 ‚Äì 1
+            /// Audio = 0 ñ 4
+            /// Video = 0 ñ 1
             /// </summary>
             public void SetMediaFormat(string audio, string video)
             {
@@ -1558,15 +1558,15 @@ namespace Rovio
             /// Get the media format.
             /// 
             /// Audio
-            /// 0 ‚Äì AMR
-            /// 1 ‚Äì PCM
-            /// 2 ‚Äì IMAADPCM
-            /// 3 ‚Äì ULAW
-            /// 4 ‚Äì ALAW
+            /// 0 ñ AMR
+            /// 1 ñ PCM
+            /// 2 ñ IMAADPCM
+            /// 3 ñ ULAW
+            /// 4 ñ ALAW
             /// 
             /// Video
-            /// 1 ‚Äì H263
-            /// 2 ‚Äì MPEG4
+            /// 1 ñ H263
+            /// 2 ñ MPEG4
             /// </summary>
             public string GetMediaFormat()
             {
