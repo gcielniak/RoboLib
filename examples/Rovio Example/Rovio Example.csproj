@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\src\Rovio.cs">
+    <Compile Include="..\..\src\Rovio.cs">
       <Link>Rovio.cs</Link>
     </Compile>
     <Compile Include="Rovio Example.cs" />

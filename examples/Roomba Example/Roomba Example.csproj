@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\src\Roomba.cs">
+    <Compile Include="..\..\src\Roomba.cs">
       <Link>Roomba.cs</Link>
     </Compile>
     <Compile Include="Roomba Example.cs" />

@@ -123,6 +123,11 @@ namespace Rovio
         /// Automatic update option for methods requesting more than one piece of information.
         /// </summary>
         public bool AutoUpdate = true;
+
+        /// <summary>
+        /// The Update function that manually refreshes the state of a given component (e.g. when AutoUpdate = false)
+        /// </summary>
+        public virtual void Update() {}
     }
 
     /// <summary>
@@ -195,11 +200,6 @@ namespace Rovio
             /// Stores the latest response from the robot. Usefull for commands supporting multiple fields in the response.
             /// </summary>
             protected string report;
-
-            /// <summary>
-            /// Update and parse the report string.
-            /// </summary>
-            public virtual void Update() { }
         }
 
         /// <summary>
@@ -1613,7 +1613,7 @@ namespace Rovio
                 /// <summary>
                 /// Update the report.
                 /// </summary>
-                public void Update()
+                public override void Update()
                 {
                     report = robot.Request("GetStatus.cgi");
                     report = report.Substring(report.IndexOf("Status = ") + 9);
@@ -1865,12 +1865,61 @@ namespace Rovio
     public class Camera : Component
     {
         Bitmap image;
+        API.Camera.HeadPosition head_position;
+        API.Camera.ImageResolution resolution;
+        API.Camera.ImageCompression image_compression;
+        API.Camera.CameraFlickerFrequency flicker_frequency;
+        int brightness;
+        int framerate;
+
 
         /// <summary>
         /// The constructor.
         /// </summary>
         /// <param name="_robot"></param>
-        public Camera(Robot _robot) : base(_robot) { }
+        public Camera(Robot _robot) : base(_robot) 
+        {
+            head_position = Rovio.API.Camera.HeadPosition.DOWN;
+            resolution = Rovio.API.Camera.ImageResolution.CGA;
+            image_compression = Rovio.API.Camera.ImageCompression.LOW;
+            flicker_frequency = Rovio.API.Camera.CameraFlickerFrequency.AUTO;
+            brightness = 0;
+            framerate = 0;
+        }
+
+        /// <summary>
+        /// Update all camera parameters excluding the image.
+        /// </summary>
+        public override void Update()
+        {
+            robot.API.Movement.Report.Update();
+
+            //store the current AutoUpdate value of the Report and switch it off when accessing multiple values
+            bool auto_update = robot.API.Movement.Report.AutoUpdate;
+            robot.API.Movement.Report.AutoUpdate = false;
+
+            int hp = robot.API.Movement.Report.HeadPosition;
+            if (hp <= 100)
+                head_position = API.Camera.HeadPosition.UP;
+            else if (hp <= 170)
+                head_position = API.Camera.HeadPosition.MIDDLE;
+            else
+                head_position = API.Camera.HeadPosition.DOWN;
+
+            resolution = robot.API.Movement.Report.Resolution;
+ 
+
+            //restore the AutoUpdate value of the Report
+            robot.API.Movement.Report.AutoUpdate = auto_update;
+        }
+
+        /// <summary>
+        /// Update the camera image.
+        /// </summary>
+        public void UpdateImage()
+        {
+            image = robot.API.Camera.GetImage();
+        }
 
         /// <summary>
         /// The latest image from the camera.
@@ -1878,9 +1927,8 @@ namespace Rovio
         public Bitmap Image
         {
             get 
-            { 
-                if (AutoUpdate)
-                    image = robot.API.Camera.GetImage();
+            {
+                if (AutoUpdate) UpdateImage();
                 return image;
             }
         }
@@ -1894,22 +1942,16 @@ namespace Rovio
             {
                 switch (value)
                 {
-                    case Rovio.API.Camera.HeadPosition.DOWN: robot.API.Movement.ManualDrive.HeadDown(); break;
-                    case Rovio.API.Camera.HeadPosition.MIDDLE: robot.API.Movement.ManualDrive.HeadMiddle(); break;
-                    case Rovio.API.Camera.HeadPosition.UP: robot.API.Movement.ManualDrive.HeadUp(); break;
+                    case API.Camera.HeadPosition.DOWN: robot.API.Movement.ManualDrive.HeadDown(); break;
+                    case API.Camera.HeadPosition.MIDDLE: robot.API.Movement.ManualDrive.HeadMiddle(); break;
+                    case API.Camera.HeadPosition.UP: robot.API.Movement.ManualDrive.HeadUp(); break;
                 }
             }
 
             get
             {
-                int head_position = robot.API.Movement.Report.HeadPosition;
-
-                if (head_position <= 100)
-                    return Rovio.API.Camera.HeadPosition.UP;
-                else if (head_position <= 170)
-                    return Rovio.API.Camera.HeadPosition.MIDDLE;
-                else
-                    return Rovio.API.Camera.HeadPosition.DOWN;
+                if (AutoUpdate) Update();
+                return head_position;
             }
         }
 
@@ -1919,7 +1961,7 @@ namespace Rovio
         public API.Camera.ImageResolution Resolution
         {
             set { robot.API.Camera.Resolution = value; }
-            get { return robot.API.Movement.Report.Resolution; }
+            get { if (AutoUpdate) Update(); return resolution; }
         }
 
         /// <summary>
@@ -1928,7 +1970,7 @@ namespace Rovio
         public API.Camera.ImageCompression Compression
         {
             set { robot.API.Camera.Compression = value; }
-            get { return robot.API.Movement.Report.Compression; }
+            get { if (AutoUpdate) Update(); return image_compression; }
         }
 
         /// <summary>
@@ -1937,7 +1979,7 @@ namespace Rovio
         public API.Camera.CameraFlickerFrequency FlickerFrequency
         {
             set { robot.API.Camera.FlickerFrequency = value; }
-            get { return robot.API.Movement.Report.FlickerFrequency; }
+            get { if (AutoUpdate) Update(); return flicker_frequency; }
         }
 
         /// <summary>
@@ -1946,7 +1988,7 @@ namespace Rovio
         public int Brightness
         {
             set { robot.API.Camera.Brightness = value; }
-            get { return robot.API.Movement.Report.Brightness; }
+            get { if (AutoUpdate) Update(); return brightness; }
         }
 
         /// <summary>
@@ -1955,7 +1997,7 @@ namespace Rovio
         public int Framerate
         {
             set { robot.API.Camera.Framerate = value; }
-            get { return robot.API.Movement.Report.Framerate; }
+            get { if (AutoUpdate) Update(); return framerate; }
         }
     }
 
@@ -1964,10 +2006,46 @@ namespace Rovio
     /// </summary>
     public class Odometry : Component
     {
+        int left_ticks;
+        int right_ticks;
+        int rear_ticks;
+
         /// <summary>
         /// The constructor.
         /// </summary>
-        public Odometry(Robot _robot) : base(_robot) { }
+        public Odometry(Robot _robot) : base(_robot) 
+        {
+            left_ticks = 0;
+            right_ticks = 0;
+            rear_ticks = 0;
+        }
+
+        /// <summary>
+        /// Update the odometry readings.
+        /// </summary>
+        public override void Update()
+        {
+            robot.API.Movement.MCUReport.Update();
+
+            //store the current AutoUpdate value of the MCU Report and switch it off when accessing multiple values
+            bool auto_update = robot.API.Movement.MCUReport.AutoUpdate;
+            robot.API.Movement.MCUReport.AutoUpdate = false;
+
+            left_ticks = robot.API.Movement.MCUReport.LeftWheelTicks;
+            if (robot.API.Movement.MCUReport.LeftWheelRot == false)
+                left_ticks = -left_ticks;
+
+            right_ticks = robot.API.Movement.MCUReport.RightWheelTicks;
+            if (robot.API.Movement.MCUReport.RightWheelRot == false)
+                right_ticks = -right_ticks;
+
+            rear_ticks = robot.API.Movement.MCUReport.LeftWheelTicks;
+            if (robot.API.Movement.MCUReport.LeftWheelRot == false)
+                rear_ticks = -rear_ticks;
+
+            //restore the AutoUpdate value of the MCU Report
+            robot.API.Movement.MCUReport.AutoUpdate = auto_update;
+        }
 
         /// <summary>
         /// Left wheel ticks including rotation direction.
@@ -1976,14 +2054,8 @@ namespace Rovio
         {
             get
             {
-                //store the current auto_update value and switch it off when accessing both rotation and tick values
-                bool auto_update = robot.API.Movement.MCUReport.AutoUpdate;
-                int ticks = robot.API.Movement.MCUReport.LeftWheelTicks;
-                robot.API.Movement.MCUReport.AutoUpdate = false;
-                if (robot.API.Movement.MCUReport.LeftWheelRot == false)
-                    ticks = -ticks;
-                robot.API.Movement.MCUReport.AutoUpdate = auto_update;
-                return ticks;
+                if (AutoUpdate) Update();
+                return left_ticks;
             }
         }
 
@@ -1994,14 +2066,8 @@ namespace Rovio
         {
             get
             {
-                //store the current auto_update value and switch it off when accessing both rotation and tick values
-                bool auto_update = robot.API.Movement.MCUReport.AutoUpdate;
-                int ticks = robot.API.Movement.MCUReport.RightWheelTicks;
-                robot.API.Movement.MCUReport.AutoUpdate = false;
-                if (robot.API.Movement.MCUReport.RightWheelRot == false)
-                    ticks = -ticks;
-                robot.API.Movement.MCUReport.AutoUpdate = auto_update;
-                return ticks;
+                if (AutoUpdate) Update();
+                return right_ticks;
             }
         }
 
@@ -2012,14 +2078,8 @@ namespace Rovio
         {
             get
             {
-                //store the current auto_update value and switch it off when accessing both rotation and tick values
-                bool auto_update = robot.API.Movement.MCUReport.AutoUpdate;
-                int ticks = robot.API.Movement.MCUReport.RearWheelTicks;
-                robot.API.Movement.MCUReport.AutoUpdate = false;
-                if (!robot.API.Movement.MCUReport.RearWheelRot == false)
-                    ticks = -ticks;
-                robot.API.Movement.MCUReport.AutoUpdate = auto_update;
-                return ticks;
+                if (AutoUpdate) Update();
+                return rear_ticks;
             }
         }
     }
@@ -2029,10 +2089,35 @@ namespace Rovio
     /// </summary>
     public class IRSensor : Component
     {
+        bool power_on;
+        bool detection;
+
         /// <summary>
         /// The constructor.
         /// </summary>
-        public IRSensor(Robot _robot) : base(_robot) {}
+        public IRSensor(Robot _robot) : base(_robot) 
+        {
+            power_on = false;
+            detection = false;
+        }
+
+        /// <summary>
+        /// Update the IRSensor value.
+        /// </summary>
+        public override void Update()
+        {
+            robot.API.Movement.MCUReport.Update();
+
+            //store the current AutoUpdate value of the MCU Report and switch it off when accessing multiple values
+            bool auto_update = robot.API.Movement.MCUReport.AutoUpdate;
+            robot.API.Movement.MCUReport.AutoUpdate = false;
+
+            power_on = robot.API.Movement.MCUReport.IRPowerOn;
+            detection = robot.API.Movement.MCUReport.IRDetectorOn;
+
+            //restore the AutoUpdate value of the MCU Report
+            robot.API.Movement.MCUReport.AutoUpdate = auto_update;
+        }
 
         /// <summary>
         /// Activate the sensor.
@@ -2040,7 +2125,7 @@ namespace Rovio
         public bool PowerOn
         {
             set { robot.API.Movement.IRSensor(value); }
-            get { return robot.API.Movement.MCUReport.IRPowerOn; }
+            get { if (AutoUpdate) Update(); return power_on; }
         }
 
         /// <summary>
@@ -2048,7 +2133,7 @@ namespace Rovio
         /// </summary>
         public bool Detection
         {
-            get { return robot.API.Movement.MCUReport.IRDetectorOn; }
+            get { if (AutoUpdate) Update(); return detection; }
         }
     }
 
@@ -2057,34 +2142,63 @@ namespace Rovio
     /// </summary>
     public class NavigationSensor : Component
     {
+        double x, y, theta;
+        int signal_strength;
+
         /// <summary>
         /// The constructor.
         /// </summary>
-        public NavigationSensor(Robot _robot) : base(_robot) { }
+        public NavigationSensor(Robot _robot) : base(_robot) 
+        {
+            x = 0;
+            y = 0;
+            theta = 0;
+            signal_strength = 0;
+        }
+
+        /// <summary>
+        /// Update the IRSensor value.
+        /// </summary>
+        public override void Update()
+        {
+            robot.API.Movement.Report.Update();
+
+            //store the current AutoUpdate value of the Report and switch it off when accessing multiple values
+            bool auto_update = robot.API.Movement.Report.AutoUpdate;
+            robot.API.Movement.Report.AutoUpdate = false;
+
+            x = robot.API.Movement.Report.X;
+            y = robot.API.Movement.Report.Y;
+            theta = robot.API.Movement.Report.Theta;
+            signal_strength = robot.API.Movement.Report.NavigationSS;
+
+            //restore the AutoUpdate value of the Report
+            robot.API.Movement.Report.AutoUpdate = auto_update;
+        }
 
         /// <summary>
         /// X position.
         /// </summary>
-        double X { get { return robot.API.Movement.Report.X; } }
+        double X { get { if (AutoUpdate) Update(); return x; } }
 
         /// <summary>
         /// X position.
         /// </summary>
-        double Y { get { return robot.API.Movement.Report.Y; } }
+        double Y { get { if (AutoUpdate) Update(); return y; } }
 
         /// <summary>
         /// X position.
         /// </summary>
-        double Theta { get { return robot.API.Movement.Report.Theta; } }
+        double Theta { get { if (AutoUpdate) Update(); return theta; } }
 
         /// <summary>
         /// Signal strength of the navigation sensor.
         /// </summary>
-        int SignalStrength { get { return robot.API.Movement.Report.NavigationSS; } }
+        int SignalStrength { get { if (AutoUpdate) Update(); return signal_strength; } }
     }
 
     /// <summary>
-    /// A convinience class for the driving commands.
+    /// A convinience class for driving commands.
     /// </summary>
     public class Drive : Component
     {

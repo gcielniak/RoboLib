@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\src\NXT.cs">
+    <Compile Include="..\..\src\NXT.cs">
       <Link>NXT.cs</Link>
     </Compile>
     <Compile Include="NXT Example.cs" />
