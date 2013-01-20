@@ -2039,8 +2039,8 @@ namespace Rovio
             if (robot.API.Movement.MCUReport.RightWheelRot == false)
                 right_ticks = -right_ticks;
 
-            rear_ticks = robot.API.Movement.MCUReport.LeftWheelTicks;
-            if (robot.API.Movement.MCUReport.LeftWheelRot == false)
+            rear_ticks = robot.API.Movement.MCUReport.RearWheelTicks;
+            if (robot.API.Movement.MCUReport.RightWheelRot == false)
                 rear_ticks = -rear_ticks;
 
             //restore the AutoUpdate value of the MCU Report
