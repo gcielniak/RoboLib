@@ -402,7 +402,7 @@ namespace Rovio
             /// NorthStar/TrueTrack version.
             public string GetLibNSVersion() { return Request("25"); }
 
-            /// Email the current image / set an action (in path recording mode).
+            /// Email the current image - set an action (in path recording mode).
             public void EmailImage(string email_address) { Request("26&email=" + email_address); }
 
             /// Clear home location.
