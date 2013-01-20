@@ -14,7 +14,7 @@ The current content consists of the following folders:
 - examples/ - example start up projects (VS2008 project files);
 - tutorials/ - tutorial files: documentation and sources (VS2008 project files).
 
-The latest documentation is available in [html](http://gcielniak.github.com/RoboLib/doc/RobotLib - refman.html) and [pdf](http://gcielniak.github.com/RoboLib/doc/RobotLib - refman.pdf) format.
+The latest documentation is available in [html](http://gcielniak.github.com/RoboLib/doc/RoboLib - refman.html) and [pdf](http://gcielniak.github.com/RoboLib/doc/RoboLib - refman.pdf) format.
 
 Please email the site admin, if you would like to contribute to this project.
 
